@@ -18,7 +18,6 @@ public class EnemyState : MonoBehaviour
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _enemyHealth = GetComponent<EnemyHealth>();
-
     }
 
     protected void BaseInitialize(EnemyStateMachine stateMachine) => _stateMachine = stateMachine;

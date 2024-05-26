@@ -1,9 +1,9 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 public class EnemyStatePatrol : EnemyState
 {
-    
     private Transform _aim;
     private Transform _aimDefaultPosition;
 
@@ -14,6 +14,8 @@ public class EnemyStatePatrol : EnemyState
     private float _viewingDistance;
     private float _viewingAngle;
     private LayerMask _layerMask;
+
+    protected Transform _otherEnemyCenter;
 
     public void Initialize(EnemyStateMachine stateMachine, Animator animator, PatrolManager patrolManager, Transform playerCenter, float viewingDistance, float viewingAngle, LayerMask layerMask)
     {
@@ -49,12 +51,45 @@ public class EnemyStatePatrol : EnemyState
             SetTargetPoint();
         }
 
-        bool canSee = SearchUtility.SearchInSector(transform.position + Vector3.up * 1.5f, transform.forward, _playerCenter.position, _viewingAngle, _viewingDistance, _layerMask);
+        _otherEnemyCenter = FindClosestEnemy();
 
-        if (canSee)
+        if (_otherEnemyCenter != null)
+        {
+            bool canSeeEnemy = SearchUtility.SearchInSector(transform.position + Vector3.up * 1.5f, transform.forward, _otherEnemyCenter.position, _viewingAngle, _viewingDistance, _layerMask);
+
+            if (canSeeEnemy)
+            {
+                _stateMachine.StartAttackEnemyState(_otherEnemyCenter);
+            }
+        }
+
+        bool canSeePlayer = SearchUtility.SearchInSector(transform.position + Vector3.up * 1.5f, transform.forward, _playerCenter.position, _viewingAngle, _viewingDistance, _layerMask);
+
+        if (canSeePlayer)
         {
             _stateMachine.StartFollowState();
         }
+    }
+
+    private Transform FindClosestEnemy()
+    {
+        var allUnits = FindObjectsOfType<Enemy>().Where(i => i.EnemyType != GetComponent<Enemy>().EnemyType).ToList();
+
+        float minDistance = Mathf.Infinity;
+
+        Transform closestEnemy = null;
+
+        for (int i = 0; i < allUnits.Count; i++)
+        {
+            float distance = Vector3.Distance(transform.position, allUnits[i].transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestEnemy = allUnits[1].EnemyCenter.transform;
+            }
+        }
+
+        return closestEnemy;
     }
 
     private void SetTargetPoint()

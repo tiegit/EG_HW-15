@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class EnemyStateMachine : MonoBehaviour
+public partial class EnemyStateMachine : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private Rig _rig;
@@ -10,6 +10,7 @@ public class EnemyStateMachine : MonoBehaviour
     [SerializeField] private EnemyStateFollow _enemyStateFollow;
     [SerializeField] private EnemyStateHitted _enemyStateHitted;
     [SerializeField] private EnemyStateDie _enemyStateDie;
+    [SerializeField] private EnemyStateAttackEnemy _enemyStateAttackEnemy;
 
     public EnemyState CurrentEnemyState { get; private set; }
 
@@ -22,6 +23,8 @@ public class EnemyStateMachine : MonoBehaviour
         _enemyStateHitted.Initialize(this, _animator, _rig);
 
         _enemyStateDie.Initialize(this, enemyCreator);
+
+        _enemyStateAttackEnemy.Initialize(this, _animator, viewingDistance, viewingAngle, layerMask);
     }
 
     private void Start() => SetState(_enemyStatePatrol);
@@ -41,6 +44,12 @@ public class EnemyStateMachine : MonoBehaviour
     public void StartHittedState() => SetState(_enemyStateHitted);
 
     public void StartDieState() => SetState(_enemyStateDie);
+
+    public void StartAttackEnemyState(Transform otherEnemyCenter)
+    {
+        _enemyStateAttackEnemy.SetTarget(otherEnemyCenter);
+        SetState(_enemyStateAttackEnemy);
+    }
 
     private void SetState(EnemyState enemyState)
     {

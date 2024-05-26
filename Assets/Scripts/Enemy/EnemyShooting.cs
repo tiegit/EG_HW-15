@@ -55,8 +55,13 @@ public class EnemyShooting : MonoBehaviour
                 playerHealth.TakeDamage(_damage);
             }
 
+            if (hit.collider.GetComponent<EnemyBodyPart>() is EnemyBodyPart enemyBodyPart) // боты будут умирать от дружественного огня???
+            {
+                enemyBodyPart.Hit(_damage, ray.direction);
+            }
+
             trailLength = hit.distance;
-        }
+        }                
 
         var bulletTrail = Instantiate(_bulletTrailPrefab, Vector3.zero, Quaternion.identity);
 

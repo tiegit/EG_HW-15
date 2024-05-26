@@ -804,7 +804,7 @@ MonoBehaviour:
   _bulletLifeTime: 5
   _layerMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 321
 --- !u!1 &782123840
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,10 +6,10 @@ using Random = UnityEngine.Random;
 
 public class EnemyCreator : MonoBehaviour
 {
-    [SerializeField] private int _mumberOfGreenEnemies = 4; // сделано на скорую руку, для того чтобы не думать об алгоритме генерации
+    [SerializeField] private int _mumberOfGreenEnemies = 4; // сделано упрощенно
     [SerializeField] private Enemy _greenEnemyPrefab;
 
-    [SerializeField] private int _mumberOfBlueEnemies = 4;
+    [SerializeField, Space(10)] private int _mumberOfBlueEnemies = 4;
     [SerializeField] private Enemy _blueEnemyPrefab;
     
     [SerializeField, Space(10)] private PatrolManager _patrolManager;
@@ -28,7 +28,7 @@ public class EnemyCreator : MonoBehaviour
         _spawnPoints.Remove(transform);
     }
 
-    private void Start() // сделано на скорую руку, для того чтобы не думать об алгоритме генерации
+    private void Start() // сделано упрощенно
     {
         for (int i = 0; i < _mumberOfGreenEnemies; i++)
         {
